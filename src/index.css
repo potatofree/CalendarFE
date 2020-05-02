@@ -11,3 +11,121 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.container {
+  /* font-family: sans-serif; */
+  display: grid;
+  position: relative;
+  max-width: 1200px;
+  min-width: 500px;
+  grid-gap: 10px;
+  margin: auto;
+  grid-template-areas: "header header"
+                        "date month"
+                        "calender month"
+                        "calender na"
+                        "footer footer";
+  grid-template-columns: 1fr 200px;
+  grid-template-rows: 80px 80px 100px 1fr 40px;
+}
+main {
+  font-family: sans-serif;
+}
+
+header {
+    grid-area: header;
+    font-family: sans-serif;
+    background-color: #11ff44;
+}
+.hname {
+  margin: 0;
+  font-size: 40px;
+  padding: 20px 8%;
+}
+footer {
+  grid-area: footer;
+  background-color: pink;
+}
+.date {
+  grid-area: date;
+  background-color: purple;
+}
+.today {
+  padding: 2px;
+ font-family: Verdana;
+ color:white;
+ text-align: center;
+}
+.day {
+  display: grid;
+  grid-gap:2px;
+  grid-template-columns: 44px 1fr;
+  grid-template-rows: repeat(16, 40px);
+}
+.hour {
+  box-sizing: border-box;
+  border: 1px solid black;
+  border-radius: 3px;
+  background-color: grey;
+  grid-column: 1;
+  font-size: 15px;
+  padding-top: 24%;
+  text-align: center;
+}
+.calender {
+  grid-area: calender;
+  background-color: #9ff;
+}
+.month {
+  grid-area: month;
+  background-color: yellow;
+  display: grid;
+  grid-gap: 1px;
+  grid-template-rows: 25px repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
+  font-size: 12px;
+}
+.month .dayname {
+  box-sizing: border-box;
+  padding-top: 20%;
+  text-align: center;
+  background-color: orange;
+  border-radius: 3px;
+}
+.month .number {
+  box-sizing: border-box;
+  padding-top: 20%;
+  text-align: center;
+  background-color: orange;
+  border-radius: 3px;
+}
+.number {
+  font-size: 18px;
+}
+.task {
+  display: flex;
+  box-sizing: border-box;
+  grid-column: 2;
+  background-color: rgba(200, 0, 0, 0.5);
+  text-align: center;
+}
+.A {
+  grid-row: 2 / 6;
+}
+.B {
+  grid-row: 10/11;
+}
+.C {
+  grid-row: 13/17;
+}
+.DC {
+  margin: auto;
+  text-align: center;
+}
+.DC p {
+  margin: 0;
+  text-align: left;
+}
+.DC h3 {
+  margin: 0;
+}
