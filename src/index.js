@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
 // import * as serviceWorker from './serviceWorker';
+function NumberCell(props) {
+  return (
+    <span className="number" onClick={props.onClick}>{props.number}</span>
+  );
+}
 
 class MonthView extends React.Component {
 
@@ -16,9 +21,8 @@ class MonthView extends React.Component {
     const firstDayGap = [6, 0, 1, 2, 3, 4, 5];
     const gap = firstDayGap[date.getDay()];
     const gapArray = Array(gap).fill('');
-    console.log(date, length, date.getDay(), gap);
-    let monthArr = [];
 
+    let monthArr = [];
     for (let i=1; i<=length; i++) {
         monthArr.push(i);
     }
@@ -26,12 +30,12 @@ class MonthView extends React.Component {
   }
 
   render() {
-    const week =['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const weekList =['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const month = this.monthArray(this.props.month, this.props.year);
     return (
       <div className="month">
-        {week.map(dayName => <span className="dayname">{dayName}</span>)}
-        {month.map(number =><span className="number">{number}</span>)}
+        {weekList.map(dayName => <span className="dayname">{dayName}</span>)}
+        {month.map(number => <NumberCell number={number} onClick={() => this.props.onClick(number)}/>)}
       </div>
     );
   }
@@ -40,16 +44,46 @@ class MonthView extends React.Component {
 
 class Calender extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      day: 1,
+      month: 5,
+      year: 2020,
+    };
+  }
+
+  handleNumberClick(i) {
+    console.log(i);
+    if (i==='') {
+      return;
+    } else {
+    this.setState({
+      day: i,
+    });}
+  }
+
   render() {
+    const monthList = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    const month = this.state.month;
+    const year = this.state.year;
+    const today = this.state.day + ' - ' + month + ' - ' + year;
     return (
       <div className="container">
         <header>
           <h1 className="hname">Just another calender</h1>
         </header>
-        <MonthView month="5" year="2020"/>
-
+        <div className="month-section">
+          <div className="month-name">
+            <div className="month-back-arrow">-1</div>
+            {monthList[month-1]}
+            <div className="month-forward-arrow">+1</div>
+            </div>
+          <MonthView month={month} year={year} onClick = {(number) => this.handleNumberClick(number)}/>
+        </div>
         <div className="date">
-          <h2 className="today">Monday, 15 Justember</h2>
+          <h2 className="today">Today is {today}</h2>
         </div>
         <div className="day calender">
           <span className="hour">7:00</span>

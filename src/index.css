@@ -26,7 +26,7 @@ code {
                         "calender na"
                         "footer footer";
   grid-template-columns: 1fr 200px;
-  grid-template-rows: 80px 80px 100px 1fr 40px;
+  grid-template-rows: 80px 80px 120px 1fr 40px;
 }
 main {
   font-family: sans-serif;
@@ -76,8 +76,23 @@ footer {
   grid-area: calender;
   background-color: #9ff;
 }
-.month {
+.month-section {
   grid-area: month;
+  display: table;
+}
+.month-name {
+  /* grid-area: month; */
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  margin: auto;
+}
+.month-back-arrow {
+  text-align: left;
+}
+.month {
+  /* grid-area: month; */
   background-color: yellow;
   display: grid;
   grid-gap: 1px;
