@@ -3,14 +3,80 @@ import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
 // import * as serviceWorker from './serviceWorker';
+
 function NumberCell(props) {
   return (
     <span className="number" onClick={props.onClick}>{props.number}</span>
   );
 }
 
-class MonthView extends React.Component {
+class MonthSection extends React.Component {
 
+  render () {
+    const day = this.props.day;
+    const month = this.props.month;
+    const year = this.props.year;
+
+    return (
+    <div class="month-section">
+      <MonthNav day={day} month={month} year={year} onChange={(date) => this.props.onChange(date)}/>
+      <MonthView day={day} month={month} year={year} onChange = {(date) => this.props.onChange(date)} />
+    </div>
+      );}
+}
+
+class MonthNav extends React.Component {
+
+  handleClick(direction) {
+    const year = this.props.year;
+    const month = this.props.month;
+
+    if (direction === 'back'){
+      if(month === 1) {
+        this.props.onChange({
+          day: 1,
+          month: 12,
+          year: year - 1,
+        });
+      } else {
+          this.props.onChange({
+            day: 1,
+            month: month - 1,
+            year: year,
+          });
+        }
+      } else if (direction === 'forward') {
+        if (month === 12) {
+          this.props.onChange({
+            day: 1,
+            month: 1,
+            year: year + 1,
+          });
+        } else {
+          this.props.onChange({
+            day: 1,
+            month: month + 1,
+            year: year,
+          });
+        }
+      } else {
+        console.error(`Unknown month change direction: ${direction}`);
+      }
+    }
+
+  render () {
+    const monthList = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    return (
+    <div className="month-name">
+      <button className="month-back-arrow" onClick={() => this.handleClick('back')}>prev</button>
+      {monthList[this.props.month-1]}
+      <button className="month-forward-arrow" onClick={() => this.handleClick('forward')}>next</button>
+    </div>
+    );}
+}
+
+class MonthView extends React.Component {
   monthLength(month, year) {
     return new Date(year, month, 0).getDate();
   }
@@ -29,106 +95,88 @@ class MonthView extends React.Component {
     return [...gapArray,...monthArr];
   }
 
+  onNumberClick(number) {
+    if (number === '') {
+      return;
+    } else {
+    this.props.onChange({
+      day: number,
+      month: this.props.month,
+      year: this.props.year,
+    });}
+  }
+
   render() {
     const weekList =['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const month = this.monthArray(this.props.month, this.props.year);
     return (
       <div className="month">
         {weekList.map(dayName => <span className="dayname">{dayName}</span>)}
-        {month.map(number => <NumberCell number={number} onClick={() => this.props.onClick(number)}/>)}
+        {month.map(number => <NumberCell number={number} onClick={() => this.onNumberClick(number)}/>)}
       </div>
     );
   }
 }
 
+class Today extends React.Component {
+
+  backToday() {
+    const today = new Date();
+    this.props.onChange({
+      day: today.getDate(),
+      month: today.getMonth() + 1,
+      year: today.getFullYear(),
+    });
+  }
+
+  render() {
+    const todayText = `${this.props.day} - ${this.props.month} - ${this.props.year}`;
+    return(
+      <div className="date">
+        <h2 className="today"><span onClick={() => this.backToday()}>Today</span> is {todayText}</h2>
+      </div>
+    );
+  }
+}
 
 class Calender extends React.Component {
 
   constructor(props) {
     super(props);
+    const today = new Date();
     this.state = {
-      day: 1,
-      month: 5,
-      year: 2020,
+      day: today.getDate(),
+      month: today.getMonth() + 1,
+      year: today.getFullYear(),
     };
   }
 
-  handleNumberClick(i) {
-    console.log(i);
-    if (i==='') {
-      return;
-    } else {
+  handleDateChange(date) {
     this.setState({
-      day: i,
-    });}
+      day: date.day,
+      month: date.month,
+      year: date.year,
+    });
   }
 
-  handleMonthNameClick(direction) {
-    const year = this.state.year;
-    const month = this.state.month;
-
-    if (direction === 'back'){
-      if(month === 1) {
-        this.setState({
-          day: 1,
-          month: 12,
-          year: year - 1,
-        });
-      } else {
-          this.setState({
-            day: 1,
-            month: month - 1,
-          });
-        }
-      } else if (direction === 'forward') {
-        if (month === 12) {
-          this.setState({
-            day: 1,
-            month: 1,
-            year: year + 1,
-          });
-        } else {
-          this.setState({
-            day: 1,
-            month: month + 1,
-          });
-        }
-      } else {
-        console.error(`Unknown month change direction: ${direction}`);
-      }
-    }
-
-    backToday() {
-      const today = new Date();
-      this.setState({
-        day: today.getDate(),
-        month: today.getMonth() + 1,
-        year: today.getFullYear(),
-      });
-    }
-
   render() {
-    const monthList = ['January', 'February', 'March', 'April', 'May', 'June',
-                        'July', 'August', 'September', 'October', 'November', 'December'];
-    const month = this.state.month;
-    const year = this.state.year;
-    const today = `${this.state.day} - ${month} - ${year}`;
     return (
       <div className="container">
         <header>
           <h1 className="hname">Just another calender</h1>
         </header>
-        <div className="month-section">
-          <div className="month-name">
-            <button className="month-back-arrow" onClick={() => this.handleMonthNameClick('back')}>prev</button>
-            {monthList[month-1]}
-            <button className="month-forward-arrow" onClick={() => this.handleMonthNameClick('forward')}>next</button>
-          </div>
-          <MonthView month={month} year={year} onClick = {(number) => this.handleNumberClick(number)}/>
-        </div>
-        <div className="date">
-          <h2 className="today"><span onClick={() => this.backToday()}>Today</span> is {today}</h2>
-          </div>
+        <MonthSection
+          day={this.state.day}
+          month={this.state.month}
+          year={this.state.year}
+          onChange={(date) => this.handleDateChange(date)}
+        />
+        <Today
+          day={this.state.day}
+          month={this.state.month}
+          year={this.state.year}
+          onChange={(date) => this.handleDateChange(date)}
+        />
         <div className="day calender">
           <span className="hour">7:00</span>
           <span className="hour">8:00</span>
@@ -150,22 +198,22 @@ class Calender extends React.Component {
             <span className="DC">
               <h3>Just make this site.</h3>
               <p>Calm down<br/>and<br/>Justify!</p>
-              </span>
-              </span>
-              <div className="task B">
-                <span className="DC">Just commit it in the git.</span>
-              </div>
-              <span className="task C">
-                <span className="DC">Just have a rest.</span>
-              </span>
-
-
-            </div>
-            <footer>
-              <h5>Just some info in a bottom.</h5>
-              <div id="like_button_container"></div>
-            </footer>
+            </span>
+          </span>
+          <div className="task B">
+            <span className="DC">Just commit it in the git.</span>
           </div>
+          <span className="task C">
+            <span className="DC">Just have a rest.</span>
+          </span>
+
+
+        </div>
+        <footer>
+          <h5>Just some info in a bottom.</h5>
+          <div id="like_button_container"></div>
+        </footer>
+      </div>
 
     );
   }
