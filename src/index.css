@@ -125,7 +125,7 @@ footer {
   text-align: center;
 }
 .A {
-  grid-row: 2 / 6;
+  grid-row: 1 / 4;
 }
 .B {
   grid-row: 10/11;
