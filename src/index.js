@@ -138,12 +138,15 @@ class Today extends React.Component {
 class PlannerSection extends React.Component {
   constructor(props) {
     super(props);
+    const tasks = this.props.taskList;
     this.state = {
       times: {
         start: 7,
         end: 22,
       },
       displayAddSection: false,
+      taskList: tasks,
+      taskNextId: tasks.length + 1,
     };
   }
 
@@ -157,9 +160,28 @@ class PlannerSection extends React.Component {
   this.setState({displayAddSection: false});
   }
 
-  addNewTask(task) {
-    this.setState({displayAddSection: false});
-  console.log(task);
+  addNewTask(newTask) {
+    const taskList = this.state.taskList.slice();
+    const nextId = this.state.taskNextId;
+    this.setState({
+      taskList: taskList.concat([{
+        id: nextId,
+        date: {
+          day: newTask.date.day,
+          month: newTask.date.month,
+          year: newTask.date.year,
+        },
+        time: {
+          start: newTask.time.start,
+          end: newTask.time.end,
+        },
+      name: newTask.name,
+      task: newTask.task,
+    }]),
+      taskNextId: nextId + 1,
+      displayAddSection: false,
+    });
+  console.log(newTask);
   }
 
   render()
@@ -169,7 +191,7 @@ class PlannerSection extends React.Component {
       <>
         <div className="day calender">
           <PlannerView times={times}/>
-          <Tasks times={times} date={this.props.date} taskList={this.props.taskList}/>
+          <Tasks times={times} date={this.props.date} taskList={this.state.taskList}/>
         </div>
         <AddTaskSection
           visible={this.state.displayAddSection}
