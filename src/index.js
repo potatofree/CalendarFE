@@ -136,22 +136,173 @@ class Today extends React.Component {
   }
 }
 class PlannerSection extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      times: {
+        start: 7,
+        end: 22,
+      },
+      displayAddSection: false,
+    };
+  }
+
+  handleAddButtonClick() {
+    if (!this.state.displayAddSection) {
+        this.setState({displayAddSection: true});
+      } else return;
+  }
+  hideAddSection(){
+    console.log("cancel handled");
+  this.setState({displayAddSection: false});
+  }
+
+  addNewTask(task) {
+    this.setState({displayAddSection: false});
+  console.log(task);
+  }
 
   render()
   {
-    const times = {
-      start: 7,
-      end: 22,
-    };
+    const times = this.state.times;
     return (
-      <div className="day calender">
-        <PlannerView times={times}/>
-        <Tasks times={times} date={this.props.date} taskList={this.props.taskList}/>
-      </div>
+      <>
+        <div className="day calender">
+          <PlannerView times={times}/>
+          <Tasks times={times} date={this.props.date} taskList={this.props.taskList}/>
+        </div>
+        <AddTaskSection
+          visible={this.state.displayAddSection}
+          date={this.props.date}
+          times={times}
+          onSubmit={(task) => this.addNewTask(task)}
+          onCancel={() => this.hideAddSection()}
+        />
+        <div className="add-button">
+          <button onClick={() => this.handleAddButtonClick()}>Just add new task</button>
+        </div>
+      </>
     );
   }
   }
+class AddTaskSection extends React.Component {
+  constructor(props) {
+    super(props);
+    const today = new Date();
+    const date = today.toISOString().slice(0, 10);
+    this.state = {
+      timeStart: this.props.times.start,
+      timeEnd: this.props.times.end,
+      date: date,
+      taskName: "New task",
+      taskDescription: "",
+    };
+  }
 
+  handleInputChange(event){
+    const target = event.target;
+    const name = target.name;
+    // to-do add start<end detection
+    this.setState({
+      [name]: target.value
+    });
+    console.log(target.value);
+  }
+
+  clearForm() {
+    const today = new Date();
+    const date = today.toISOString().slice(0, 10);
+    this.setState({
+      timeStart: this.props.times.start,
+      timeEnd: this.props.times.end,
+      date: date,
+      taskName: "New task",
+      taskDescription: "",
+    });
+  }
+
+  handleCancel() {
+    this.clearForm();
+    this.props.onCancel();
+  }
+
+  handleSubmit() {
+    const task = {
+      date: {
+        year: Number(this.state.date.slice(0, 4)),
+        month: Number(this.state.date.slice(5,7)),
+        day: Number(this.state.date.slice(8,10)),
+      },
+      time: {
+        start: this.state.timeStart,
+        end: this.state.timeEnd,
+      },
+      name: this.state.taskName,
+      task: this.state.taskDescription,
+    }
+    this.clearForm();
+    // console.log(task);
+    // this.props.onCancel();
+    this.props.onSubmit(task);
+  }
+  render(){
+    if (!this.props.visible) {
+      return null;
+    } else {
+      return (
+        <div className="add-section">
+          <p>Here will be add section. Somewhen.</p>
+          <form onSubmit={() => this.handleSubmit()}>
+            <label>time start
+              <input
+                name="timeStart"
+                type="number"
+                min={this.props.times.start}
+                max={this.props.times.end}
+                value={this.state.timeStart}
+                onChange={(event) => this.handleInputChange(event)}
+              />
+            </label>
+            <label>time end
+              <input
+                name="timeEnd"
+                type="number"
+                min={this.props.times.start}
+                max={this.props.times.end}
+                value={this.state.timeEnd}
+                onChange={(event) => this.handleInputChange(event)}
+              />
+            </label><br/>
+            <label>
+              <input
+                name="date"
+                type="date"
+                value={this.state.date}
+                onChange={(event) => this.handleInputChange(event)}
+              /><br/>
+              <input
+                name="taskName"
+                type="text"
+                value={this.state.taskName}
+                onChange={(event) => this.handleInputChange(event)}
+              /><br/>
+              <input
+                name="taskDescription"
+                type="text"
+                value={this.state.taskDescription}
+                onChange={(event) => this.handleInputChange(event)}
+              />
+              <button onClick={() => this.handleCancel()}>Cancel</button>
+              <input type="submit" value="Add" />
+
+            </label>
+
+          </form>
+        </div>
+      );
+    }
+  }
+}
   function PlannerView(props) {
     const start = props.times.start;
     const end = props.times.end;
@@ -188,31 +339,23 @@ class PlannerSection extends React.Component {
             const dayEnd = props.times.end;
             let firstRow = 0;
             let lastRow = 0;
-            console.log('task');
             if (task.time.end <= dayStart || task.time.start > dayEnd ) {
-              console.log(task.time);
               return null;
             } else {
               if (task.time.start<=dayStart) {
                 firstRow = 1;
-                console.log(firstRow);
               } else {
                 firstRow = task.time.start - dayStart + 1;
-                console.log(firstRow);
               }
               if (task.time.end > dayEnd) {
-                lastRow = dayEnd - dayStart + 1;
-                console.log(lastRow);
+                lastRow = dayEnd - dayStart + 2;
               } else {
                 lastRow = task.time.end - dayStart + 1;
-                console.log(lastRow);
               }
             }
             const style = {
           gridRow: `${firstRow} / ${lastRow}`
             }
-            console.log(`${firstRow} / ${lastRow}`);
-            console.log(style);
             return(
               <div className={`task ${task.id}`} style={style}>
                 <span className="DC">

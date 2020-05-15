@@ -23,10 +23,9 @@ code {
   grid-template-areas: "header header"
                         "date month"
                         "calender month"
-                        "calender na"
-                        "footer footer";
+                        "calender rightside";
   grid-template-columns: 1fr 200px;
-  grid-template-rows: 80px 80px 120px 1fr 40px;
+  grid-template-rows: 80px 80px 120px 1fr;
 }
 main {
   font-family: sans-serif;
@@ -43,8 +42,14 @@ header {
   padding: 20px 8%;
 }
 footer {
-  grid-area: footer;
+  /* grid-area: footer; */
   background-color: pink;
+}
+.add-button {
+  grid-area: rightside;
+}
+.add-section {
+
 }
 .date {
   grid-area: date;
