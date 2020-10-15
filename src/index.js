@@ -4,7 +4,8 @@ import './index.css';
 import { useSelector, useDispatch} from 'react-redux';
 import store from './store';
 import { Provider } from 'react-redux';
-import { loadTasks, loadTasksAsync } from './tasksSlice';
+import { loadTasks, loadTasksAsync, selectTasks } from './tasksSlice';
+import { selectDate, setDate} from './dateSlice';
 
 // import App from './App';
 // import * as serviceWorker from './serviceWorker';
@@ -151,7 +152,6 @@ class Today extends React.Component {
 }
 class PlannerSection extends React.Component {
   constructor(props) {
-    console.log('444');
     super(props);
     const tasks = this.props.taskList;
     this.state = {
@@ -518,24 +518,18 @@ function Task(props) {
 //   this.setState({date: date});
 // }
 const Calender = function () {
+
   const taskList = useSelector(selectTasks);
-  const today = new Date();
-
-  const date = {
-    day: today.getDate(),
-    month: today.getMonth() + 1,
-    year: today.getFullYear(),
-  };
-
+  const date = useSelector(selectDate);
   const dispatch = useDispatch();
-  console.log(taskList, '111');
+  const dateTest = {day: 15, month: 10, year: 2020};
 
   return (
     <div className="container">
       <header>
         <button
           aria-label="Load tasks"
-          onClick={() => dispatch(loadTasksAsync())}
+          onClick={() => {dispatch(loadTasksAsync()); dispatch(setDate(dateTest)); console.log(date);}}
         >
           Load
         </button>
@@ -543,11 +537,11 @@ const Calender = function () {
       </header>
       <MonthSection
         date={date}
-        onChange={(date) => this.handleDateChange(date)}
+        onChange={(date) => dispatch(setDate(date))}
       />
       <Today
         date={date}
-        onChange={(date) => this.handleDateChange(date)}
+        onChange={(date) => dispatch(setDate(date))}
       />
       <PlannerSection taskList={taskList} date={date} />
       <footer>
@@ -559,52 +553,6 @@ const Calender = function () {
 };
 // }
 
-const TASKS = [
-  {
-    id: 1,
-    date: {
-      day: 13,
-      month: 10,
-      year: 2020,
-    },
-    time: {
-      start: 7,
-      end: 10,
-    },
-    name: `Just make this site.`,
-    task: `Calm down and Justify!`,
-  },
-  {
-    id: 2,
-    date: {
-      day: 13,
-      month: 10,
-      year: 2020,
-    },
-    time: {
-      start: 13,
-      end: 15,
-    },
-    name: `Lunch`,
-    task: `Just eat smthng.`,
-  },
-  {
-    id: 3,
-    date: {
-      day: 14,
-      month: 5,
-      year: 2020,
-    },
-    time: {
-      start: 18,
-      end: 23,
-    },
-    name: `Git-git.`,
-    task: `Keep calm and just commit.`,
-  },
-];
-
-const selectTasks = state => {console.log(state); return state.tasks.value;}
 
 ReactDOM.render(
   <React.StrictMode>
