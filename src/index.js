@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import store from './store';
 import { Provider } from 'react-redux';
-import { loadTasks, loadTasksAsync, selectTasks } from './tasksSlice';
-import { selectDate, setDate} from './dateSlice';
+import { loadTasks, loadTasksAsync, selectTasks, addTasks} from './tasksSlice';
+import { selectDate, setDate } from './dateSlice';
 
 // import App from './App';
 // import * as serviceWorker from './serviceWorker';
@@ -500,38 +500,40 @@ function Task(props) {
   )
 }
 
-// class Calender extends React.Component {
-
-// constructor(props) {
-//   super(props);
-//   const today = new Date();
-//   this.state = {
-//     date: {
-//       day: today.getDate(),
-//       month: today.getMonth() + 1,
-//       year: today.getFullYear(),
-//     }
-//   };
-// }
-
-// handleDateChange(date) {
-//   this.setState({date: date});
-// }
 const Calender = function () {
 
   const taskList = useSelector(selectTasks);
   const date = useSelector(selectDate);
   const dispatch = useDispatch();
-  const dateTest = {day: 15, month: 10, year: 2020};
+  const testTask = {
+    id: 1,
+    date: {
+      day: 15,
+      month: 10,
+      year: 2020,
+    },
+    time: {
+      start: 11,
+      end: 14,
+    },
+    name: `Make tests great Again`,
+    task: `test! test! test!`,
+  };
 
   return (
     <div className="container">
       <header>
         <button
           aria-label="Load tasks"
-          onClick={() => {dispatch(loadTasksAsync()); dispatch(setDate(dateTest)); console.log(date);}}
+          onClick={() => { dispatch(loadTasksAsync());}}
         >
           Load
+        </button>
+        <button
+          aria-label="Add task"
+          onClick={() => { dispatch(addTasks(testTask));}}
+        >
+          Add
         </button>
         <h1 className="hname">Just another calender</h1>
       </header>
@@ -551,7 +553,6 @@ const Calender = function () {
 
   );
 };
-// }
 
 
 ReactDOM.render(
