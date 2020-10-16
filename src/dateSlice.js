@@ -1,24 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const today = new Date();
+const todayDate = {
+    day: today.getDate(),
+    month: today.getMonth() + 1,
+    year: today.getFullYear(),
+};
 
 export const dateSlice = createSlice({
     name: 'date',
     initialState: {
-        date: {
-            day: today.getDate(),
-            month: today.getMonth() + 1,
-            year: today.getFullYear(),
-        },
+        date: todayDate,
     },
     reducers: {
         setDate: (state, action) => {
             state.date = action.payload;
         },
+        setDateToday: state => {
+            state.date = todayDate;
+        },
     },
 });
 
-export const { setDate } = dateSlice.actions;
+export const { setDate, setDateToday } = dateSlice.actions;
 
 export default dateSlice.reducer;
 

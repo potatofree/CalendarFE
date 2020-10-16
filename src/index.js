@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import store from './store';
 import { Provider } from 'react-redux';
 import { loadTasks, loadTasksAsync, selectTasks, addTasks } from './tasksSlice';
-import { selectDate, setDate } from './dateSlice';
+import { selectDate, setDate, setDateToday } from './dateSlice';
 
 // import App from './App';
 // import * as serviceWorker from './serviceWorker';
@@ -123,26 +123,15 @@ const MonthView = function (props) {
   );
 };
 
-class Today extends React.Component {
-
-  backToday() {
-    const today = new Date();
-    this.props.onChange({
-      day: today.getDate(),
-      month: today.getMonth() + 1,
-      year: today.getFullYear(),
-    });
-  }
-
-  render() {
-    const todayText = `${this.props.date.day} - ${this.props.date.month} - ${this.props.date.year}`;
-    return (
-      <div className="date">
-        <h2 className="today"><span onClick={() => this.backToday()}>Today</span> is {todayText}</h2>
-      </div>
-    );
-  }
-}
+const Today = function (props) {
+  const dispatch = useDispatch();
+  const todayText = `${props.date.day} - ${props.date.month} - ${props.date.year}`;
+  return (
+    <div className="date">
+      <h2 className="today"><span onClick={() => dispatch(setDateToday())}>Today</span> is {todayText}</h2>
+    </div>
+  );
+};
 class PlannerSection extends React.Component {
   constructor(props) {
     super(props);
