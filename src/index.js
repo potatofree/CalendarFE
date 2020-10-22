@@ -6,6 +6,7 @@ import store from './store';
 import { Provider } from 'react-redux';
 import { loadTasks, loadTasksAsync, selectTasks, addTasks } from './tasksSlice';
 import { selectDate, setDate, setDateToday } from './dateSlice';
+import NewTaskForm from './taskForm';
 
 // import App from './App';
 // import * as serviceWorker from './serviceWorker';
@@ -524,6 +525,12 @@ const Calender = function () {
       <footer>
         <h5>Just some info in a bottom.</h5>
       </footer>
+      <br/>
+      <NewTaskForm onSubmit={values => console.log(values)} />
+      <br/>
+      <br/>
+      <br/>
+      <br/>
     </div>
 
   );
