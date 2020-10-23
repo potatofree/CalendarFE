@@ -1,8 +1,8 @@
 import React from 'react';
 import PlannerView from './PlannerView';
 import Tasks from './Tasks';
-import { useDispatch } from 'react-redux';
-import { selectTask } from '../tasksSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectedTask, selectTask, deleteTask } from '../tasksSlice';
 
 // const tasks = props.task;
 //       this.state = {
@@ -139,17 +139,12 @@ const times = {
     end: 22,
 };
 
-// const handleTaskClick = (id) => {
-
-//     console.log('id: ', id);
-
-
-//  };
 const showTaskForm = () => { };
 const handleAddButtonClick = () => { };
 
 export const PlannerSection = (props) => {
     const dispatch = useDispatch();
+    const activeTask = useSelector(selectedTask);
     return (
         <>
             <div className="day calender">
@@ -164,6 +159,11 @@ export const PlannerSection = (props) => {
             {showTaskForm()}
             <div className="add-button">
                 <button onClick={() => handleAddButtonClick()}>Just add new task</button>
+            </div>
+            <div>
+                <button onClick={() => {dispatch(deleteTask(activeTask))}}>
+                    Delete Task
+                    </button>
             </div>
         </>
     );

@@ -10,5 +10,4 @@ export default configureStore({
     date: dateReducer,
     form: formReducer,
   },
-  middleware: [thunk, logger],
 });
