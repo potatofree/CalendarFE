@@ -1,61 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { taskConvertBackToFront, taskConvertFrontToBack } from './tasksConverter';
-
-// const TASKS = [
-//   {
-//     id: 1,
-//     date: {
-//       day: 13,
-//       month: 10,
-//       year: 2020,
-//     },
-//     time: {
-//       start: 7,
-//       end: 10,
-//     },
-//     name: `Just make this site.`,
-//     task: `Calm down and Justify!`,
-//   },
-//   {
-//     id: 2,
-//     date: {
-//       day: 13,
-//       month: 10,
-//       year: 2020,
-//     },
-//     time: {
-//       start: 13,
-//       end: 15,
-//     },
-//     name: `Lunch`,
-//     task: `Just eat smthng.`,
-//   },
-//   {
-//     id: 3,
-//     date: {
-//       day: 14,
-//       month: 5,
-//       year: 2020,
-//     },
-//     time: {
-//       start: 18,
-//       end: 23,
-//     },
-//     name: `Git-git.`,
-//     task: `Keep calm and just commit.`,
-//   },
-// ];
+import { taskConvertBackToFront, taskConvertFrontToBack, taskConvertFormtoFront } from './tasksConverter';
 
 export const tasksSlice = createSlice({
   name: 'tasks',
   initialState: {
     value: [],
+    selectedTask: {},
   },
   reducers: {
     loadTasks: (state, action) => {
       const tasks = action.payload.map(rawTask => taskConvertBackToFront(rawTask));
       state.value = tasks;
-      console.log('loaded tasks', tasks);
+      console.log('loaded tasks', state.value);
     },
     addTasks: (state, action) => {
       const newTask = taskConvertFrontToBack(action.payload);
@@ -76,6 +32,17 @@ export const tasksSlice = createSlice({
           console.error('Error:', error);
         });
     },
+    addTaskFromForm: (state, action) => {
+      const newTask = taskConvertFormtoFront(action.payload);
+      addTasks(newTask);
+      console.log(newTask);
+    },
+    selectTask: (state, action) => {
+      const id = action.payload;
+      console.log(id);
+      state.selectedTask = state.value.find(task => task.id === id);
+      console.log(JSON.stringify(state.selectedTask));
+    }
   },
 });
 
@@ -88,7 +55,7 @@ export const loadTasksAsync = () => dispatch => {
     });
 };
 
-export const { loadTasks, addTasks } = tasksSlice.actions;
+export const { loadTasks, addTasks, addTaskFromForm, selectTask } = tasksSlice.actions;
 export default tasksSlice.reducer;
 
 export const selectTasks = state => state.tasks.value;
