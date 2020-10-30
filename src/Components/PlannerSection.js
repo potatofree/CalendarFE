@@ -139,8 +139,8 @@ const times = {
     end: 22,
 };
 
-const showTaskForm = () => { };
-const handleAddButtonClick = () => { };
+// const showTaskForm = () => { };
+// const handleAddButtonClick = () => { };
 
 export const PlannerSection = (props) => {
     const dispatch = useDispatch();
@@ -156,12 +156,12 @@ export const PlannerSection = (props) => {
                     onClick={(id) => dispatch(selectTask(id))}
                 />
             </div>
-            {showTaskForm()}
-            <div className="add-button">
+            {/* {showTaskForm()} */}
+            {/* <div className="add-button">
                 <button onClick={() => handleAddButtonClick()}>Just add new task</button>
-            </div>
+            </div> */}
             <div>
-                <button onClick={() => {dispatch(deleteTask(activeTask))}}>
+                <button onClick={() => {dispatch(deleteTask(activeTask.id))}}>
                     Delete Task
                     </button>
             </div>

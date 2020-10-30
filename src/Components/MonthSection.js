@@ -1,4 +1,7 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import {occupiedDays} from '../occupiedDays';
+import { selectTasks } from '../tasksSlice';
 
 const monthNavigation = function (date, direction) {
     const year = date.year;
@@ -70,23 +73,35 @@ const MonthNav = function (props) {
 const MonthView = function (props) {
     const weekList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const month = monthArray(props.date.month, props.date.year);
+    const taskList = useSelector(selectTasks);
+    const occupied = occupiedDays(taskList, props.date.month, props.date.year);
+    
     return (
         <div className="month">
             {weekList.map(dayName => <span className="dayname">{dayName}</span>)}
-            {month.map(number => <NumberCell number={number} onClick={() =>
-                props.onChange({
-                    day: (number) ? number : props.date.day,
-                    month: props.date.month,
-                    year: props.date.year,
-                })
-            } />)}
+            {month.map(number =>
+                <NumberCell
+                    number={number}
+                    occupied={occupied.includes(number)}
+                    month={props.date.month}
+                    onClick={() =>
+                        props.onChange({
+                            day: (number) ? number : props.date.day,
+                            month: props.date.month,
+                            year: props.date.year,
+                        })
+                    } />
+            )}
         </div>
     );
 };
 
 const NumberCell = function (props) {
     return (
-        <span className="number" onClick={props.onClick}>{props.number}</span>
+        <span className={(props.occupied) ? "number-occupied" : "number"}
+            onClick={props.onClick}>
+            {props.number}
+        </span>
     );
 };
 

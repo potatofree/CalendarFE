@@ -13,12 +13,13 @@ import { MonthSection } from './Components/MonthSection';
 
 // import App from './App';
 // import * as serviceWorker from './serviceWorker';
-const dateToString = function (date) {
-  const year = date.year;
-  const month = date.month < 10 ? `0${date.month}` : `${date.month}`;
-  const day = date.day < 10 ? `0${date.day}` : `${date.day}`
-  return `${year}-${month}-${day}`;
-};
+
+// const dateToString = function (date) {
+//   const year = date.year;
+//   const month = date.month < 10 ? `0${date.month}` : `${date.month}`;
+//   const day = date.day < 10 ? `0${date.day}` : `${date.day}`
+//   return `${year}-${month}-${day}`;
+// };
 
 const Today = function (props) {
   const dispatch = useDispatch();

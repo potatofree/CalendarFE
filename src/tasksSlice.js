@@ -41,23 +41,26 @@ export const tasksSlice = createSlice({
       state.selectedTask = state.value.find(task => task.id === id);
       console.log(JSON.stringify(state.selectedTask));
     },
-    deleteTask: (state, action) => {
-      fetch('http://localhost:3001/calender/events/' + action.payload.id, {
-        method: 'DELETE',
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-          loadTasksAsync();
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    },
+
   },
 });
 
+export const deleteTask = (taskID) => dispatch => {
+  fetch('http://localhost:3001/calender/events/' + taskID.toString(), {
+    method: 'DELETE',
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      dispatch(loadTasksAsync());
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+};
+
 export const loadTasksAsync = () => dispatch => {
+  console.log('Loading');
   fetch('http://localhost:3001/calender/events')
     .then(response => response.json())
     .then(data => dispatch(loadTasks(data)))
@@ -66,7 +69,7 @@ export const loadTasksAsync = () => dispatch => {
     });
 };
 
-export const { loadTasks, addTasks, addTaskFromForm, selectTask, deleteTask } = tasksSlice.actions;
+export const { loadTasks, addTasks, addTaskFromForm, selectTask } = tasksSlice.actions;
 export default tasksSlice.reducer;
 
 export const selectTasks = state => state.tasks.value;

@@ -122,6 +122,14 @@ footer {
 .number {
   font-size: 18px;
 }
+.number-occupied {
+  box-sizing: border-box;
+  padding-top: 20%;
+  text-align: center;
+  background-color: orangered;
+  border-radius: 3px;
+  font-size: 18px;
+}
 .task {
   display: flex;
   box-sizing: border-box;
