@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { taskConvertBackToFront, taskConvertFrontToBack, taskConvertFormtoFront } from './tasksConverter';
+import { taskConvertBackToFront, taskConvertFormtoBack } from './tasksConverter';
 
 export const tasksSlice = createSlice({
   name: 'tasks',
@@ -12,28 +12,6 @@ export const tasksSlice = createSlice({
       const tasks = action.payload.map(rawTask => taskConvertBackToFront(rawTask));
       state.value = tasks;
       console.log('loaded tasks', state.value);
-    },
-    addTasks: (state, action) => {
-      const newTask = taskConvertFrontToBack(action.payload);
-      fetch('http://localhost:3001/calender/events/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newTask),
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    },
-    addTaskFromForm: (state, action) => {
-      const newTask = taskConvertFormtoFront(action.payload);
-      addTasks(newTask);
-      console.log(newTask);
     },
     selectTask: (state, action) => {
       const id = action.payload;
@@ -69,7 +47,32 @@ export const loadTasksAsync = () => dispatch => {
     });
 };
 
-export const { loadTasks, addTasks, addTaskFromForm, selectTask } = tasksSlice.actions;
+export const addTasks = (task) => dispatch => {
+  const newTask = taskConvertFormtoBack(task);
+  fetch('http://localhost:3001/calender/events/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newTask),
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      dispatch(loadTasksAsync());
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+};
+
+// addTaskFromForm: (state, action) => {
+//   const newTask = taskConvertFormtoFront(action.payload);
+//   addTasks(newTask);
+//   console.log(newTask);
+// }
+
+export const { loadTasks, addTaskFromForm, selectTask } = tasksSlice.actions;
 export default tasksSlice.reducer;
 
 export const selectTasks = state => state.tasks.value;

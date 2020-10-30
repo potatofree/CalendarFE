@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import { loadTasksAsync, selectTasks, addTasks } from './tasksSlice';
 import { selectDate, setDate, setDateToday } from './dateSlice';
 import NewTaskForm from './Components/taskForm';
-import { taskConvertFormtoFront } from './tasksConverter';
 import { PlannerSection } from './Components/PlannerSection';
 import { MonthSection } from './Components/MonthSection';
 
@@ -62,11 +61,7 @@ const Calender = function () {
         <h5>Just some info in a bottom.</h5>
       </footer>
       <br />
-      <NewTaskForm onSubmit={(values) => {
-        const newTask = taskConvertFormtoFront(values);
-        dispatch(addTasks(newTask));
-      }
-      } />
+      <NewTaskForm onSubmit={(values) => dispatch(addTasks(values))} />
       <br />
       <br />
       <br />
