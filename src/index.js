@@ -43,13 +43,6 @@ const Calender = function () {
   return (
     <div className="container">
       <header>
-        <button
-          aria-label="Load tasks"
-          onClick={() => { dispatch(loadTasksAsync()); }}
-        >
-          Load
-        </button>
-
         <h1 className="hname">Just another calender</h1>
       </header>
       <MonthSection
