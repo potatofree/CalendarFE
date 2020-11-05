@@ -1,6 +1,9 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { selectedTask } from '../tasksSlice';
 
 export const Task = function (props) {
+    const selected = useSelector(selectedTask);
     const task = props.task;
     const dayStart = props.times.start;
     const dayEnd = props.times.end;
@@ -21,8 +24,9 @@ export const Task = function (props) {
       }
     }
     const style = {
+      border: (selected.id === task.id) ? `solid 2px` : '',
       gridRow: `${firstRow} / ${lastRow}`
-    }
+    };
     return (
       <div className={`task ${task.id}`} style={style} onClick={() => props.onClick(task.id)}>
         <span className="DC">

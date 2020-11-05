@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { useSelector, useDispatch } from 'react-redux';
@@ -36,6 +36,10 @@ const Calender = function () {
   const date = useSelector(selectDate);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    console.log('Component did updated.');
+  })
+
   return (
     <div className="container">
       <header>
@@ -62,20 +66,24 @@ const Calender = function () {
       </footer>
       <br />
       <NewTaskForm onSubmit={(values) => dispatch(addTasks(values))} />
-      <br />
-      <br />
-      <br />
-      <br />
     </div>
 
   );
 };
 
+const App = function () {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadTasksAsync())
+  });
+
+  return <Calender />
+}
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Calender />
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
